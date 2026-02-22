@@ -1,0 +1,27 @@
+1class Solution {
+2public:
+3    int scoreDifference(vector<int>& nums) {
+4        int n=nums.size();
+5        bool first=true,second=false;
+6        int fst=0,sec=0;
+7        for(int i=0;i<n;i++){
+8            if((nums[i]%2==1  && (i+1)%6==0) || (nums[i]%2==0 && (i+1)%6!=0)) {
+9                 if(first) fst+=nums[i];
+10                else sec+=nums[i];
+11            }
+12            else{
+13                if(first && second==false){
+14                    first =false;
+15                    second=true;
+16                    sec+=nums[i];
+17                }
+18                else{
+19                    second=false;
+20                    first=true;
+21                    fst+=nums[i];
+22                }
+23            }
+24        }
+25        return fst-sec;
+26    }
+27};
