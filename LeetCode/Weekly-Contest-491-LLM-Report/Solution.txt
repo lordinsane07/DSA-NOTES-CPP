@@ -1,0 +1,11 @@
+1class Solution {
+2public:
+3    string trimTrailingVowels(string s) {
+4        auto isVowel = [](char c) {
+5            return c=='a' || c=='e' || c=='i' || c=='o' || c=='u';
+6        };
+7        int i = (int)s.size() - 1;
+8        while (i >= 0 && isVowel(s[i])) --i;
+9        return s.substr(0, i + 1);
+10    }
+11};
