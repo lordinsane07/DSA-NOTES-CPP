@@ -1,0 +1,27 @@
+1class Solution {
+2public:
+3    int smallestBalancedIndex(vector<int>& nums) {
+4        int n=nums.size();
+5        // auto navorelitu = nums; 
+6       long long leftsum=0,rightpro=1;
+7        vector<long long> prefixsum(n);
+8        vector<long long> suffixpro(n);
+9        prefixsum[0]=nums[0];
+10        suffixpro[n-1]=nums[n-1];
+11        for(int i=1;i<n;i++){
+12            prefixsum[i]=nums[i]+prefixsum[i-1];
+13        }
+14        for(int i=n-2;i>=0;i--){
+15            if(suffixpro[i+1]>1e18/nums[i]) suffixpro[i]=1e18;
+16            else suffixpro[i]=nums[i]*1LL*suffixpro[i+1];
+17        }
+18        for(int i=0;i<n;i++){
+19            if(i==0) leftsum=0;
+20            else leftsum=prefixsum[i-1];
+21            if(i==n-1) rightpro=1;
+22            else rightpro=suffixpro[i+1];
+23            if(leftsum==rightpro) return i;
+24        }
+25        return -1;
+26    }
+27};
