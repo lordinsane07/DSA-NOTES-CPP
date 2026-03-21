@@ -1,29 +1,90 @@
-1class Solution {
-2public:
-3    vector<vector<int>> minAbsDiff(vector<vector<int>>& grid, int k) {
-4        int n=grid.size();
-5        int m=grid[0].size();
-6        vector<vector<int>> result(n-k+1,vector<int> (m-k+1,0));
-7        for(int i=0;i<=n-k;i++){
-8            for(int j=0;j<=m-k;j++){
-9                set<int> val;
-10                for(int x=i;x<=i+k-1;x++){
-11                    for(int y=j;y<=j+k-1;y++){
-12                        val.insert(grid[x][y]);
-13                    }
-14                }
-15                if(val.size()==1) continue;
-16                int mindiff=INT_MAX;
-17                auto prev=val.begin();
-18                auto curr=next(prev);
-19                while(curr!=val.end()){
-20                    mindiff=min(mindiff,abs(*curr-*prev));
-21                    prev=curr;
-22                    curr++;
-23                }
-24                result[i][j]=mindiff;
-25            }
-26        }
-27        return result;
-28    }
-29};
+class Solution:
+    def minAbsDiff(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        m = len(grid)
+        n = len(grid[0])
+        res = [[0]*(n-k+1) for _ in range(m-k+1)]
+        kelems = defaultdict(int)
+        for i in range(k):
+            for j in range(k):
+                kelems[grid[i][j]] += 1
+        
+        kgrid = SortedList(kelems)
+        diff = SortedList(kgrid[i]-kgrid[i-1] for i in range(1,len(kgrid)))
+        if len(kelems)>1:
+            res[0][0] = diff[0]
+        for j in range(k,n):
+            for i in range(k-1,-1,-1):
+                element = grid[i][j-k]
+                self.remove(element,kelems,kgrid,diff)
+                element = grid[i][j]
+                self.add(element,kelems,kgrid,diff)
+            if len(kelems)>1:
+                res[0][j-k+1] = diff[0]
+        reverse = True
+        for i in range(k,m):
+            if not reverse:
+                for j in range(k):
+                    element = grid[i-k][j]
+                    self.remove(element,kelems,kgrid,diff)
+                    element = grid[i][j]
+                    self.add(element,kelems,kgrid,diff)
+                if len(kelems)>1:
+                    res[i-k+1][0]=diff[0]
+                for l in range(k,n):
+                    for j in range(k):
+                        element = grid[i-j][l-k]
+                        self.remove(element,kelems,kgrid,diff)
+                        element = grid[i-j][l]
+                        self.add(element,kelems,kgrid,diff)
+                    if len(kelems)>1:
+                        res[i-k+1][l-k+1] = diff[0]
+            else:
+                for j in range(k):
+                    element = grid[i-k][n-j-1]
+                    self.remove(element,kelems,kgrid,diff)
+                    element = grid[i][n-j-1]
+                    self.add(element,kelems,kgrid,diff)
+                if len(kelems)>1:
+                    res[i-k+1][n-k]=diff[0]
+                for l in range(n-k-1,-1,-1):
+                    for j in range(k):
+                        element = grid[i-j][l+k]
+                        self.remove(element,kelems,kgrid,diff)
+                        element = grid[i-j][l]
+                        self.add(element,kelems,kgrid,diff)
+                    if len(kelems)>1:
+                        res[i-k+1][l] = diff[0]
+            reverse = not reverse
+
+        return res
+
+    def remove(self, element, kelems, kgrid,diff):
+        if kelems[element]==1:
+            idx = kgrid.index(element)
+            if idx>0 and idx<len(kgrid)-1:
+                diff.remove(kgrid[idx]-kgrid[idx-1])
+                diff.remove(kgrid[idx+1]-kgrid[idx])
+                diff.add(kgrid[idx+1]-kgrid[idx-1])
+            elif idx>0:
+                diff.remove(kgrid[idx]-kgrid[idx-1])
+            elif idx<len(kgrid)-1:
+                diff.remove(kgrid[idx+1]-kgrid[idx])
+            kelems.pop(element)
+            kgrid.remove(element)
+            
+        else:
+            kelems[element]-=1
+        
+    def add(self,element, kelems, kgrid,diff):
+        kelems[element]+=1
+        if kelems[element]==1:
+            kgrid.add(element)
+            idx = kgrid.index(element)
+            if idx>0 and idx<len(kgrid)-1:
+                diff.remove(kgrid[idx+1]-kgrid[idx-1])
+                diff.add(kgrid[idx]-kgrid[idx-1])
+                diff.add(kgrid[idx+1]-kgrid[idx])
+            elif idx>0:
+                diff.add(kgrid[idx]-kgrid[idx-1])
+            elif idx<len(kgrid)-1:
+                diff.add(kgrid[idx+1]-kgrid[idx])
