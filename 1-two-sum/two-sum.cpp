@@ -3,10 +3,11 @@ public:
     vector<int> twoSum(vector<int>& nums, int target) {
         int n=nums.size();
         int sum=0;
-        for(int i=0;i<n-1;i++){
-            for(int j=i+1;j<n;j++){
-                if(target==nums[i]+nums[j]) return {i,j};
-            }
+        unordered_map<int,int> mpp;
+        for(int i=0;i<n;i++){
+            int need=target-nums[i];
+            if(mpp.find(need)!=mpp.end()) return {i,mpp[need]};
+            mpp[nums[i]]=i;
         }
         return {-1,-1};
     }
