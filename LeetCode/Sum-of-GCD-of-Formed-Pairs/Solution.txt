@@ -1,0 +1,21 @@
+1class Solution {
+2public:
+3    long long gcdSum(vector<int>& nums) {
+4        int n=nums.size();
+5        int x=0,j=n-1;
+6      long long gcd=0;
+7        vector<int> ans;
+8        int maxi=nums[0];
+9        ans.push_back(nums[0]);
+10        for(int i=1;i<n;i++){
+11            maxi=max(maxi,nums[i]);
+12            ans.push_back(__gcd(maxi,nums[i]));
+13        }
+14        sort(ans.begin(),ans.end());
+15        while(x<j){
+16                gcd+=__gcd(ans[x],ans[j]);
+17            x++;j--;
+18        }
+19        return gcd;
+20    }
+21};

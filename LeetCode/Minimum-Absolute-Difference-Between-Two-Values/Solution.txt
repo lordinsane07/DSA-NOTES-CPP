@@ -1,0 +1,20 @@
+1class Solution {
+2public:
+3    int minAbsoluteDifference(vector<int>& nums) {
+4        vector<int> ans;
+5        vector<int> ans1;
+6        for(int i=0;i<nums.size();i++){
+7            if(nums[i]==1) ans.push_back(i);
+8            else if(nums[i]==2) ans1.push_back(i);
+9            else continue;
+10        }
+11        if(ans.size()==0 || ans1.size()==0) return -1;
+12        int mini=INT_MAX;
+13        for(int i=0;i<ans.size();i++){
+14            for(int j=0;j<ans1.size();j++){
+15                mini=min(mini,abs(ans[i]-ans1[j]));
+16            }
+17        }
+18        return mini;
+19    }
+20};

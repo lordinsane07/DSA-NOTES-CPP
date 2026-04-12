@@ -1,0 +1,29 @@
+1class Solution {
+2public:
+3    int fact(int d){
+4        if(d<=1) return 1;
+5        return d*fact(d-1);
+6    }
+7    bool isDigitorialPermutation(int n) {
+8        int temp=n;
+9        int sum=0;
+10        while(temp!=0){
+11            int d=temp%10;
+12                sum=sum+fact(d);
+13                temp=temp/10;
+14        }
+15        vector<int> cntN(10,0);
+16        temp=n;
+17        while(temp!=0){
+18            cntN[temp%10]++;
+19            temp/=10;
+20        }
+21        vector<int> cntS(10,0);
+22       temp=sum;
+23        while(temp!=0){
+24            cntS[temp%10]++;
+25            temp/=10;
+26        }
+27         return cntS==cntN;
+28    }
+29};

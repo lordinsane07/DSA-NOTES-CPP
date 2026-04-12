@@ -1,0 +1,18 @@
+1class Solution {
+2public:
+3    int minimumIndex(vector<int>& capacity, int itemSize) {
+4        int n=capacity.size();
+5        int mini=INT_MAX;
+6        int ind=-1;
+7        for(int i=0;i<n;i++){
+8            if(capacity[i]>=itemSize){
+9                if(capacity[i]<mini){
+10                mini=min(mini,capacity[i]);
+11                // if(capacity[i]==mini) 
+12                ind=i;
+13                }
+14            }
+15        }
+16        return ind;
+17    }
+18};

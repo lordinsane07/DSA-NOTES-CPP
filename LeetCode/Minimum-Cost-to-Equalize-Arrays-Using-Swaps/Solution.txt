@@ -1,0 +1,23 @@
+1class Solution {
+2public:
+3    int minCost(vector<int>& nums1, vector<int>& nums2) {
+4        int n=nums1.size();
+5         unordered_map<int,int> mpp;
+6        unordered_map<int,int> mpp1;
+7             unordered_map<int,int> mpp2;
+8        for(int i=0;i<n;i++){
+9            mpp1[nums1[i]]++;
+10            mpp2[nums2[i]]++;
+11            mpp[nums1[i]]++;
+12            mpp[nums2[i]]++;
+13        }
+14        for(auto it:mpp){
+15            if(it.second%2==1) return -1;
+16        }
+17        int diff=0;
+18        for(auto p:mpp){
+19            diff+=abs(mpp1[p.first]-mpp2[p.first]);
+20        }
+21        return diff/4;
+22    }
+23};

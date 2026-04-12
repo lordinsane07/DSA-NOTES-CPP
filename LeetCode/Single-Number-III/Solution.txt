@@ -1,0 +1,22 @@
+1class Solution {
+2public:
+3    vector<int> singleNumber(vector<int>& nums) {
+4      	int n=nums.size();
+5			long x=0;
+6			for(int i=0;i<n;i++){
+7				x=x^nums[i];
+8			}
+9			int rightmost=(x & (x-1)) ^ x;
+10			int x1=0,x2=0;
+11			for(int i=0;i<n;i++){
+12				if(nums[i] & rightmost){
+13					x1=x1 ^ nums[i]; 
+14				}
+15				else{
+16					x2=x2 ^ nums[i];
+17				}
+18			}
+19			if(x1>x2) return {x2,x1};
+20			else return {x1,x2};  
+21    }
+22};
